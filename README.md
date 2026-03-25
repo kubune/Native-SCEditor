@@ -1,19 +1,25 @@
-### How to compile & load
+# Runtime SC-Editor
 
-```sh
-$ git clone https://github.com/oleavr/frida-agent-example.git
-$ cd frida-agent-example/
-$ npm install
-$ frida -U -f com.example.android -l _agent.js
-```
+[SC-Editor](https://github.com/danila-schelkov/sc-editor) that runs in Brawl Stars at runtime!
 
-### Development workflow
+# Why?
+Why not? ¯\_(ツ)_/¯
 
-To continuously recompile on change, keep this running in a terminal:
+# Features
+- Viewing .sc files directly from the game assets
+- WIP Timeline
 
-```sh
-$ npm run watch
-```
+# How To Use & Requirements
+1. Use your brain!
+2. `npm install`
 
-And use an editor like Visual Studio Code for code completion and instant
-type-checking feedback.
+# TODO
+- Better Timeline (slider)
+- Viewing timelineChildrens
+- Better UI
+- Loading .sc files from phone storage
+- Hide UI with a button
+- Scroll Area on exports
+
+# Credits
+- [SC-Editor](https://github.com/danila-schelkov/sc-editor)
