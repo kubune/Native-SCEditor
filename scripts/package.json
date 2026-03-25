@@ -1,0 +1,15 @@
+{
+  "name": "frida-compiler",
+  "version": "1.0.0",
+  "description": "build frida compile",
+  "private": true,
+  "main": "compile.js",
+  "type": "module",
+  "scripts": {
+  },
+  "devDependencies": {
+    "@types/frida-gum": "^19.0.0",
+    "@types/node": "^18.19.111",
+    "frida": "^17.8.2"
+  }
+}
