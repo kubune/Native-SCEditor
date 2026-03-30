@@ -1,4 +1,4 @@
-# Runtime SC-Editor
+# Native SC-Editor
 
 [SC-Editor](https://github.com/danila-schelkov/sc-editor) that runs in Brawl Stars at runtime!
 
@@ -7,6 +7,7 @@ Why not? ¯\_(ツ)_/¯
 
 # Features
 - Viewing .sc files directly from the game assets
+- Pan & Zoom
 - WIP Timeline
 
 # How To Use & Requirements
