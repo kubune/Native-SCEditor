@@ -3,7 +3,7 @@
 [SC-Editor](https://github.com/danila-schelkov/sc-editor) that runs in Brawl Stars at runtime!
 
 # Why?
-Why not? ¯\_(ツ)_/¯
+Why not? ¯\_(ツ)_/¯ (S.B will kill me)
 
 # Features
 - Viewing .sc files directly from the game assets
@@ -19,8 +19,14 @@ Why not? ¯\_(ツ)_/¯
 - Viewing timelineChildrens
 - Better UI
 - Loading .sc files from phone storage
-- Hide UI with a button
-- Scroll Area on exports
+- Hide UI using home button
+- Scroll Area on exports list
+
+# Additional Info
+- Made in laser@66.263 (arm64)
+- kinda vibecoded in some days
+- due to lack of motivation i will not be maintaining this project constantly
 
 # Credits
 - [SC-Editor](https://github.com/danila-schelkov/sc-editor)
+- [Frida **17**](https://frida.re/)

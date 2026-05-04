@@ -1,3 +1,3 @@
 export default class Configuration {
-    public static DEBUG_LOGGING = true;
+    public static DEBUG_LOGGING = false;
 }

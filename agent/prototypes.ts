@@ -10,6 +10,7 @@ declare global {
         fromsc(): string;
     }
 }
+
 export default function BakePrototypes() {
     NativePointer.prototype.fromsc = function () {
         const str = (this.add(4).readInt() >= 8 ? this.add(8).readPointer() : this.add(8)).readUtf8String();

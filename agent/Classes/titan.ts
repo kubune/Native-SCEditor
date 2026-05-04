@@ -40,3 +40,24 @@ export class Stage extends BaseClass {
         return new NativeFunction(this.add(0xBB75EC), 'pointer', ['pointer', 'pointer'])(this.getInstance().readPointer().add(6648).readPointer(), childPtr);
     }
 }
+
+export class ResourceManager extends BaseClass {
+    constructor() {
+        super();
+    }
+
+    public static getMovieClip(scFile: String, export_name: String | NativePointer, a3: number = 0) {
+        let exportNamePtr: NativePointer;
+        if (typeof export_name === "string") {
+            exportNamePtr = export_name.ptr();
+        }
+        else {
+            exportNamePtr = export_name as NativePointer;
+        }
+        return new NativeFunction(this.add(0x9233E8), 'pointer', ['pointer', 'pointer', 'int'])(scFile.ptr(), exportNamePtr, a3);
+    }
+
+    public static getSupercellSWF(swfName: String) {
+        return new NativeFunction(this.add(0xB7949C), 'pointer', ['pointer', 'int'])(swfName.ptr(), 0);
+    }
+}

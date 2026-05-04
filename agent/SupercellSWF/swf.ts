@@ -1,4 +1,4 @@
-import GameLibrary from "../library";
+import { ResourceManager } from "../Classes/titan";
 
 export default class SupercellSWF {
     swf: NativePointer;
@@ -7,10 +7,7 @@ export default class SupercellSWF {
     }
 
     public static getSWF(swfName: string) {
-        const base = GameLibrary.getInstance().getLibrary()
-        const ResourceManager_getSupercellSWF = new NativeFunction(base.add(0xB7949C), 'pointer', ['pointer', 'int']);
-
-        return new SupercellSWF(ResourceManager_getSupercellSWF(swfName.ptr(), 0));
+        return new SupercellSWF(ResourceManager.getSupercellSWF(swfName));
     }
 
     public getSWF() {

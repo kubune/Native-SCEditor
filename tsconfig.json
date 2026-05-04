@@ -2,9 +2,12 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
-    "module": "Node16",
+    "module": "esnext",
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node", "frida-gum"],
+    "skipLibCheck": true
   },
-  "include": ["agent/**/*.ts"]
+  "include": ["agent/**/*.ts"],
+  "exclude": ["node_modules"]
 }

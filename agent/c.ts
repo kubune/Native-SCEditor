@@ -14,9 +14,9 @@ export default class C {
         return new NativeFunction(this.getExport('getaddrinfo'), 'int', ['pointer', 'pointer', 'pointer', 'pointer']);
     }
     static stat(path: NativePointer, buf: NativePointer): number {
-        return new NativeFunction(Module.getGlobalExportByName("stat"), 'int', ['pointer', 'pointer'])(path, buf);
+        return new NativeFunction(this.getExport("stat"), 'int', ['pointer', 'pointer'])(path, buf);
     }
     public static access(path: NativePointer, mode: number): number {
-        return new NativeFunction(Module.getGlobalExportByName("access"), "int", ["pointer", "int"])(path, mode);
+        return new NativeFunction(this.getExport("access"), "int", ["pointer", "int"])(path, mode);
     }
 }

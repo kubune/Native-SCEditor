@@ -1,3 +1,4 @@
+// caution: ai helped here
 export default class TouchTracker {
     private touches = new Map<number, { x: number; y: number; lastSeen: number }>();
 
@@ -13,9 +14,6 @@ export default class TouchTracker {
     private startScaleX: number = 1;
     private startScaleY: number = 1;
 
-    private zoomCenterX: number = 0;
-    private zoomCenterY: number = 0;
-
     private isZooming: boolean = false;
     private timeoutMs: number = 150;
 
@@ -28,9 +26,6 @@ export default class TouchTracker {
 
         const touchCount = this.touches.size;
 
-        // --------------------
-        // TWO FINGERS → ZOOM
-        // --------------------
         if (touchCount >= 2) {
             const points = Array.from(this.touches.values()).slice(0, 2);
             const p1 = points[0];
@@ -39,7 +34,6 @@ export default class TouchTracker {
             const dx = p1.x - p2.x;
             const dy = p1.y - p2.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            // inside the two-finger zoom section
             const midpointX = (p1.x + p2.x) / 2;
             const midpointY = (p1.y + p2.y) / 2;
 
@@ -51,21 +45,14 @@ export default class TouchTracker {
                 this.startScaleX = movieClip.add(16).readFloat();
                 this.startScaleY = movieClip.add(28).readFloat();
 
-                // Zoom center in screen coordinates
-                this.zoomCenterX = midpointX;
-                this.zoomCenterY = midpointY;
-
-                // Store current clip position
                 this.startClipX = movieClip.add(32).readFloat();
                 this.startClipY = movieClip.add(36).readFloat();
 
                 return;
             }
 
-
-            const touchToClip = 1 / 5; // adjust this to match your actual ratio
-            const clipMidX = midpointX * touchToClip;
-            const clipMidY = midpointY * touchToClip;
+            const clipMidX = midpointX * 0.2;
+            const clipMidY = midpointY * 0.2;
 
             // calculate scale factor
             const scaleFactor = distance / this.startDistance;
@@ -84,9 +71,6 @@ export default class TouchTracker {
             return;
         }
 
-        // --------------------
-        // ONE FINGER → PAN
-        // --------------------
         if (touchCount === 1) {
             const [touchId, touch] = Array.from(this.touches.entries())[0];
 

@@ -1,12 +1,12 @@
 import GameLibrary from "./library";
 import Logger from "./logger";
-import RemoveClickSound from "./Patches/clicks";
-import GoToLimboState from "./Patches/gameflow";
-import PatchNetworking from "./Patches/networking";
 import BakePrototypes from "./prototypes";
 import TouchTracker from "./UserInterface/touch";
 import SCEditor from "./UserInterface/ui";
-import CreateSCEditor from "./UserInterface/ui";
+
+import RemoveClickSound from "./Patches/clicks";
+import GoToLimboState from "./Patches/gameflow";
+import PatchNetworking from "./Patches/networking";
 
 const library = GameLibrary.getInstance();
 const base = library.loadLibrary();
@@ -21,7 +21,6 @@ logger.debug(`found base at @${base}`);
 
 Interceptor.attach(base.add(0x93A8B4), {
     onEnter(args) {
-        const a2 = args[1];
         const logger = Logger.getInstance().withContext("DataTableResourcesLoader::listResources")
         this.stringer = Interceptor.attach(base.add(0xD52620), {
             onEnter(args) {

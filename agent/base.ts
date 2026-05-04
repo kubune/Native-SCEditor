@@ -2,7 +2,7 @@ import GameLibrary from "./library";
 
 export default class BaseClass {
     constructor() {
-        
+        // empty constructor, just to be extended
     }
 
     public add(offset: number) {
