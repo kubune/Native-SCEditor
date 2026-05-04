@@ -30,3 +30,4 @@ Why not? ¯\\\_(ツ)\_/¯ (S.B will kill me)
 # Credits
 - [SC-Editor](https://github.com/danila-schelkov/sc-editor)
 - [Frida **17**](https://frida.re/)
+- UI made by graphik - Discord: @graphik23 (802169687542726719)
