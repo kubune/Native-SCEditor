@@ -3,7 +3,7 @@
 [SC-Editor](https://github.com/danila-schelkov/sc-editor) that runs in Brawl Stars at runtime!
 
 # Why?
-Why not? ¯\\_(ツ)_/¯ (S.B will kill me)
+Why not? ¯\\\_(ツ)\_/¯ (S.B will kill me)
 
 # Features
 - Viewing .sc files directly from the game assets
