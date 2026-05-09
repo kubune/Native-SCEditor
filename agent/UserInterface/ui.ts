@@ -1,3 +1,4 @@
+import Assets from "../assets";
 import C from "../c";
 import { MovieClip, TextField } from "../Classes/flash";
 import { GameMain } from "../Classes/GameMain";
@@ -19,7 +20,6 @@ export default class SCEditor {
     private base: NativePointer;
     private logger = Logger.getInstance().withContext("SCEditor");
     private loaderLogger = Logger.getInstance().withContext("Loader");
-
     private state = false;
     private debugTextField: NativePointer | null = null;
     private exportNamesTextField: NativePointer[] | null = null;
@@ -38,8 +38,7 @@ export default class SCEditor {
 
     private exportButtons: NativePointer[] = [];
 
-    // TODO: need a better way to detect that stuff... any ideas?
-    private scFiles = ['background_basic.sc', 'background_brawlentines25.sc', 'background_dragonsandfairies.sc', 'background_najia.sc', 'background_sandoftime.sc', 'background_sirius.sc', 'brawl_pass.sc', 'buddy.sc', 'buddy_shop.sc', 'characters.sc', 'daily_wins.sc', 'debug.sc', 'effects.sc', 'effects_brawler.sc', 'effects_brawler2.sc', 'effects_brawler_8bit.sc', 'effects_brawler_alli.sc', 'effects_brawler_amber.sc', 'effects_brawler_angelo.sc', 'effects_brawler_ash.sc', 'effects_brawler_barley.sc', 'effects_brawler_bea.sc', 'effects_brawler_belle.sc', 'effects_brawler_berry.sc', 'effects_brawler_bibi.sc', 'effects_brawler_bo.sc', 'effects_brawler_bonnie.sc', 'effects_brawler_brock.sc', 'effects_brawler_bull.sc', 'effects_brawler_buster.sc', 'effects_brawler_buzz.sc', 'effects_brawler_byron.sc', 'effects_brawler_carl.sc', 'effects_brawler_charlie.sc', 'effects_brawler_chester.sc', 'effects_brawler_chuck.sc', 'effects_brawler_clancy.sc', 'effects_brawler_colette.sc', 'effects_brawler_colt.sc', 'effects_brawler_cordelius.sc', 'effects_brawler_crow.sc', 'effects_brawler_darryl.sc', 'effects_brawler_doug.sc', 'effects_brawler_draco.sc', 'effects_brawler_dynamike.sc', 'effects_brawler_edgar.sc', 'effects_brawler_elprimo.sc', 'effects_brawler_emz.sc', 'effects_brawler_eve.sc', 'effects_brawler_fang.sc', 'effects_brawler_finx.sc', 'effects_brawler_frank.sc', 'effects_brawler_gale.sc', 'effects_brawler_gen.sc', 'effects_brawler_gene.sc', 'effects_brawler_gigi.sc', 'effects_brawler_glowbert.sc', 'effects_brawler_gray.sc', 'effects_brawler_griff.sc', 'effects_brawler_grom.sc', 'effects_brawler_gus.sc', 'effects_brawler_hank.sc', 'effects_brawler_jacky.sc', 'effects_brawler_jaeyong.sc', 'effects_brawler_janet.sc', 'effects_brawler_jessie.sc', 'effects_brawler_juju.sc', 'effects_brawler_kaze.sc', 'effects_brawler_kenji.sc', 'effects_brawler_kit.sc', 'effects_brawler_larrylawrie.sc', 'effects_brawler_leon.sc', 'effects_brawler_lily.sc', 'effects_brawler_lola.sc', 'effects_brawler_lou.sc', 'effects_brawler_lumi.sc', 'effects_brawler_maisie.sc', 'effects_brawler_mandy.sc', 'effects_brawler_max.sc', 'effects_brawler_meeple.sc', 'effects_brawler_meg.sc', 'effects_brawler_melodie.sc', 'effects_brawler_mico.sc', 'effects_brawler_mina.sc', 'effects_brawler_moe.sc', 'effects_brawler_mortis.sc', 'effects_brawler_mrp.sc', 'effects_brawler_najia.sc', 'effects_brawler_nani.sc', 'effects_brawler_nita.sc', 'effects_brawler_ollie.sc', 'effects_brawler_otis.sc', 'effects_brawler_pam.sc', 'effects_brawler_pearl.sc', 'effects_brawler_penny.sc', 'effects_brawler_pierce.sc', 'effects_brawler_piper.sc', 'effects_brawler_poco.sc', 'effects_brawler_rico.sc', 'effects_brawler_rosa.sc', 'effects_brawler_rt.sc', 'effects_brawler_ruffs.sc', 'effects_brawler_sam.sc', 'effects_brawler_sandy.sc', 'effects_brawler_shade.sc', 'effects_brawler_shelly.sc', 'effects_brawler_sirius.sc', 'effects_brawler_spike.sc', 'effects_brawler_sprout.sc', 'effects_brawler_squeak.sc', 'effects_brawler_stu.sc', 'effects_brawler_surge.sc', 'effects_brawler_tara.sc', 'effects_brawler_tick.sc', 'effects_brawler_trunk.sc', 'effects_brawler_willow.sc', 'effects_brawler_ziggy.sc', 'emoji_1.sc', 'emoji_2.sc', 'emoji_65.sc', 'emoji_66.sc', 'events.sc', 'gacha.sc', 'hero_portraits.sc', 'level.sc', 'loading.sc', 'loading_brawlentine26.sc', 'loading_buffies.sc', 'loading_dragonsandfairies.sc', 'loading_glowbert.sc', 'loading_mecha.sc', 'loading_naija.sc', 'loading_sirius.sc', 'loading_steampunk.sc', 'player_icons.sc', 'player_icons_1.sc', 'player_icons_66.sc', 'prestige.sc', 'profile.sc', 'quests.sc', 'sprays_1.sc', 'sprays_66.sc', 'supercell_id.sc', 'trophy_world_1.sc', 'trophy_world_2.sc', 'trophy_world_3.sc', 'trophy_world_4.sc', 'trophy_world_5.sc', 'trophy_world_6.sc', 'trophy_world_common.sc', 'trophy_world_future.sc', 'trophy_world_minimap.sc', 'ui.sc', 'ui_achievements.sc', 'ui_brawler_event.sc', 'ui_roguelite.sc', 'sce_ui.sc'];
+    private scFiles = ['sce_ui.sc'];
     private page: number = 0;
 
     private timelineEnabled: boolean = false;
@@ -56,10 +55,17 @@ export default class SCEditor {
     }
 
     init() {
+        this.preInit();
         this.loadUI();
         this.createCoreButtons();
         this.attachHook();
         this.showDebug();
+    }
+
+    preInit() {
+        if (Assets.scFiles.length > 0) {
+            this.scFiles = Assets.scFiles;
+        }
     }
 
     private loadUI() {
@@ -238,22 +244,14 @@ export default class SCEditor {
                     clicked.equals(this.miscButtons[4])
                 ) {
                     this.page++;
-                    if (this.exportNamesTextField != null && this.exportNamesTextField.length > 0) {
-                        for (let i = 0; i < this.exportNamesTextField.length; i ++) {
-                            Stage.removeChild(this.exportNamesTextField[i]);
-                        }
-                        this.exportNamesTextField = null;
-                        if (this.exportButtons.length > 0) {
-                            for (let i = 0; i < this.exportButtons.length; i++) {
-                                Stage.removeChild(this.exportButtons[i]);
-                            }
-                            this.exportButtons = [];
-                        }
-                        return;
-                    }
-
                     this.showExportNames();
+                }
 
+                if (this.miscButtons.length > 0 &&
+                    clicked.equals(this.miscButtons[5])
+                ) {
+                    if (this.page > 0) this.page--;
+                    this.showExportNames();
                 }
                 
                 if (this.miscButtons.length > 0 &&

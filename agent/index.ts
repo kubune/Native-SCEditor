@@ -7,10 +7,14 @@ import SCEditor from "./UserInterface/ui";
 import RemoveClickSound from "./Patches/clicks";
 import GoToLimboState from "./Patches/gameflow";
 import PatchNetworking from "./Patches/networking";
+import Assets from "./assets";
 
 const library = GameLibrary.getInstance();
 const base = library.loadLibrary();
 BakePrototypes();
+
+const assets = new Assets();
+assets.init();
 
 PatchNetworking();
 GoToLimboState();
