@@ -233,6 +233,11 @@ export default class SCEditor {
 
                 if (this.isClicked("load", clicked)) {
                     const $files = FileSystem.Directory.listDirectoryRecursive(Application.getUpdateDirectory());
+                    for (const $entry of $files) {
+                        if ($entry.isDirectory) {
+                            $files.splice($files.indexOf($entry), 1);
+                        }
+                    }
                     this.createLoadingList($files);
                 }
 
