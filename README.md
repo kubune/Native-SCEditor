@@ -1,7 +1,7 @@
 # Native SC-Editor
 
 [SC-Editor](https://github.com/danila-schelkov/sc-editor) that runs in Brawl Stars at runtime!
-![Example Screenshot](./assets/screenshot.png)
+![Example Screenshot](./assets/screenshot.jpg)
 # Why?
 Why not? ¯\\\_(ツ)\_/¯ (S.B will kill me)
 
