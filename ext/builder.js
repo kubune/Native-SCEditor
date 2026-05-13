@@ -37,7 +37,7 @@ async function build() {
     const dummy = await frida.attach(0);
     const bytecodeScript = await dummy.compileScript(bundle);
 
-    fs.writeFileSync(`${project}/dist/index.bin`, bytecodeScript);
+    fs.writeFileSync(`${project}/dist/libeditor.so`, bytecodeScript);
 }
 
 build();
