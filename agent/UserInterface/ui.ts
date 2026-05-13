@@ -8,6 +8,8 @@ import Logger from "../logger";
 import MovieClipNativeHelper from "../SupercellSWF/movieclip";
 import SupercellSWF from "../SupercellSWF/swf";
 import TimelineSliderTask from "../Update/timeline";
+import Application from "../Utility/application";
+import FileSystem, { DirEntry } from "../Utility/fileSystem";
 
 GameLibrary.getInstance().ensureLoadedLibrary();
 const base = GameLibrary.getInstance().getLibrary();
@@ -230,7 +232,8 @@ export default class SCEditor {
                 const clicked = args[0];
 
                 if (this.isClicked("load", clicked)) {
-                    this.loaderLogger.debug(this.selectedFile.getExportNames());
+                    const $files = FileSystem.Directory.listDirectoryRecursive(Application.getUpdateDirectory());
+                    this.createLoadingList($files);
                 }
 
                 if (this.isClicked("exit", clicked)) {
@@ -429,23 +432,45 @@ export default class SCEditor {
         });
     }
 
+    private customSCFiles: DirEntry[] = [];
+
+    private createLoadingList(files: DirEntry[]) {
+        this.customSCFiles = files;
+        this.page = 0;
+        for (let i = 0; i < files.length; i++) {
+            if (files[i].name == "fingerprint.json") {
+                files.splice(i, 1);
+                i--;
+            }
+        }
+        this.showExportNames(true);
+    }
+
     private buttonMap = new Map<number, number>();
     private interceptorAttached = false;
+    private currentListIsLoading = false;
 
-    private showExportNames() {
+    private showExportNames(isLoadingList: boolean = false) {
+        this.currentListIsLoading = isLoadingList;
+
         // Cleanup UI
         this.exportButtons.forEach(btn => Stage.removeChild(btn));
         this.exportButtons = [];
 
         if (this.exportNamesTextField == null) this.exportNamesTextField = [];
+
         this.exportNamesTextField.forEach(tf => Stage.removeChild(tf));
         this.exportNamesTextField = [];
 
         const start = this.page * 20;
-        const text = this.selectedFile.getExportNames().slice(start, start + 20);
-        const exportNameCount = this.selectedFile.getExportNameCount();
 
-        //this.logger.debug(text);
+        const text = this.currentListIsLoading
+            ? this.customSCFiles.map((file) => file.name).slice(start, start + 20)
+            : this.selectedFile.getExportNames().slice(start, start + 20);
+
+        const exportNameCount = this.currentListIsLoading
+            ? this.customSCFiles.length
+            : this.selectedFile.getExportNameCount();
 
         // create labels for export names
         for (let i = 0; i < 20; i++) {
@@ -469,43 +494,58 @@ export default class SCEditor {
             const btnTf = MovieClip.getTextFieldByName(button, "txt_load".ptr());
 
             TextField.setText(btnTf, "".scptr());
+
             button.add(16).writeFloat(0.5);
             button.add(28).writeFloat(0.5);
 
             const btn = this.createButton(button, 385, 77.5 + (i - start) * 22.5);
 
             this.exportButtons.push(btn);
-            this.buttonMap.set(btn.toInt32(), i); // store index
+            this.buttonMap.set(btn.toInt32(), i);
         }
 
         if (!this.interceptorAttached) {
             this.interceptorAttached = true;
 
-            Interceptor.attach(base.add(0xBD7E00), { // CustomButton::buttonClicked
+            Interceptor.attach(base.add(0xBD7E00), {
                 onEnter: (args) => {
                     const btnPtr = args[0].toInt32();
                     const index = this.buttonMap.get(btnPtr);
 
                     if (index === undefined) return;
 
-                    const uisc = this.selectedFile;
-                    const clip = ResourceManager.getMovieClip(
-                        this.selectedSCFile,
-                        uisc.getExportNameAt(index),
-                        0
-                    );
+                    // CUSTOM SC FILE LIST
+                    if (this.currentListIsLoading) {
+                        const scFile = this.customSCFiles[index]?.name;
+                        if (!scFile) return;
+                        try {
+                            GameMain.loadAsset(scFile);
 
-                    if (this.selectedClip) {
-                        new NativeFunction(base.add(0xBB68F4), 'pointer', ['pointer', 'pointer'])(
-                            this.background,
-                            this.selectedClip
-                        ); // Sprite::removeChild
+                            this.selectedFile = SupercellSWF.getSWF(scFile);
+                            this.selectedSCFile = scFile;
+                        } catch (e) {
+                            console.log("failed loading sc file", e);
+                        }
+                        this.currentListIsLoading = false;
+
+                        this.showDebug();
+                        if (this.exportNamesTextField != null) {
+                            this.showExportNames(false);
+                        }
+                        return;
                     }
 
-                    new NativeFunction(base.add(0xBB661C), "pointer", ["pointer", "pointer"])(
-                        this.background,
-                        clip
-                    ); // Sprite::addChild
+                    const exportName = this.selectedFile.getExportNameAt(index);
+                    if (!exportName) return;
+
+                    const clip = ResourceManager.getMovieClip(this.selectedSCFile, exportName, 0);
+
+                    if (this.selectedClip) { // Sprite::removeChild
+                        new NativeFunction(base.add(0xBB68F4), 'pointer', ['pointer', 'pointer'])(this.background, this.selectedClip);
+                    }
+
+                    // Sprite::addChild
+                    new NativeFunction(base.add(0xBB661C), "pointer", ["pointer", "pointer"])(this.background, clip);
 
                     clip.add(16).writeFloat(clip.add(16).readFloat() * 0.33);
                     clip.add(28).writeFloat(clip.add(28).readFloat() * 0.33);
@@ -513,21 +553,6 @@ export default class SCEditor {
                     clip.add(36).writeFloat(clip.add(36).readFloat() + 150);
 
                     this.selectedClip = clip;
-
-                    /*const exportName = clip.add(96).readPointer().readUtf8String();
-                    const childrenArray = clip.add(120).readPointer();
-                    const childrenCount = clip.add(160).readU16();
-
-                    const log = Logger.getInstance().withContext("CHILDS");
-
-                    for (let j = 0; j < childrenCount; j++) {
-                        try {
-                            const childName = childrenArray.add(8 * j).readPointer().readUtf8String();
-                            log.debug(`${exportName}: ${childName}`);
-                        } catch {
-                            log.debug(`${exportName}: null`);
-                        }
-                    }*/
 
                     if (this.debugTextField) {
                         Stage.removeChild(this.debugTextField);
