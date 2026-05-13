@@ -1,6 +1,8 @@
 import C from "../c";
 import FileSystem from "./fileSystem";
 
+type Architecture = "arm" | "arm64";
+
 export default class Application {
     public static getPackageName(): string {
         const $buffer = Memory.alloc(4096);
@@ -20,5 +22,9 @@ export default class Application {
             C.mkdir($path.ptr());
         }
         return $path;
+    }
+
+    public static get arch() {
+        return Process.pointerSize == 8 ? "arm64" : "arm" as Architecture;
     }
 }
