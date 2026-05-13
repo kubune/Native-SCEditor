@@ -11,10 +11,10 @@ import TimelineSliderTask from "../Update/timeline";
 
 GameLibrary.getInstance().ensureLoadedLibrary();
 const base = GameLibrary.getInstance().getLibrary();
-const GameButton = new NativeFunction(base.add(0x57A84C), 'pointer', ['pointer']);
+const GameButton = new NativeFunction(base.add(0x57A788), 'pointer', ['pointer']);
 
 // fallback getMovieClip function...
-const getMC = new NativeFunction(base.add(0xB79B3C), 'pointer', ['pointer', 'pointer']); 
+const getMC = new NativeFunction(base.add(0xB78E44), 'pointer', ['pointer', 'pointer']); 
 
 export default class SCEditor {
     private base: NativePointer;
@@ -43,6 +43,7 @@ export default class SCEditor {
 
     private timelineEnabled: boolean = false;
     private timelineClip: NativePointer | null = null;
+    private timelineClips: NativePointer[] = [];
     private timelineIsPlaying: boolean = true;
     private playbackBtn: NativePointer | null = null;
     private playbackBtnClip: NativePointer = ptr(0);
@@ -143,21 +144,21 @@ export default class SCEditor {
         this.state = !this.state;
 
         if (this.state) {
-            for (let i = 1; i <= 7; i++) {
+            for (let i = 1; i <= 4; i++) {
                 switch (i) {
-                    case 3:
-                        let mc_btn = this.createMiscButton("MovieClip Test", 50 * i);
-                        this.miscButtons.push(mc_btn);
-                        break;
-                    case 4:
+                    //case 3:
+                        //let mc_btn = this.createMiscButton("MovieClip Test", 50 * i);
+                        //this.miscButtons.push(mc_btn);
+                        //break;
+                    case 2:
                         let swtich = this.createMiscButton("Switch File", 50 * i);
                         this.miscButtons.push(swtich);
                         break;
-                    case 5:
+                    case 3:
                         let next_page = this.createMiscButton("Next Page", 50 * i);
                         this.miscButtons.push(next_page);
                         break;
-                    case 6:
+                    case 4:
                         let prev_page = this.createMiscButton("Prev Page", 50 * i);
                         this.miscButtons.push(prev_page);
                         break;
@@ -224,7 +225,7 @@ export default class SCEditor {
         if (this.hookAttached) return;
         this.hookAttached = true;
 
-        Interceptor.attach(this.base.add(0xBD8AF8), { // CustomButton::buttonClicked
+        Interceptor.attach(this.base.add(0xBD7E00), { // CustomButton::buttonClicked
             onEnter: (args) => {
                 const clicked = args[0];
 
@@ -241,14 +242,15 @@ export default class SCEditor {
                 }
                 
                 if (this.miscButtons.length > 0 &&
-                    clicked.equals(this.miscButtons[4])
+                    clicked.equals(this.miscButtons[2])
                 ) {
-                    this.page++;
+                    const exportNameCount = this.selectedFile.getExportNameCount();
+                    if ((this.page + 1) * 20 < exportNameCount) this.page++;
                     this.showExportNames();
                 }
 
                 if (this.miscButtons.length > 0 &&
-                    clicked.equals(this.miscButtons[5])
+                    clicked.equals(this.miscButtons[3])
                 ) {
                     if (this.page > 0) this.page--;
                     this.showExportNames();
@@ -257,9 +259,15 @@ export default class SCEditor {
                 if (this.miscButtons.length > 0 &&
                     clicked.equals(this.miscButtons[0])
                 ) {
-                    if (this.timelineClip != null && this.timelineEnabled) {
-                        Stage.removeChild(this.timelineClip);
+                    console.log(this.timelineClip, this.timelineEnabled)
+                    if (this.timelineClip != null && this.timelineEnabled && this.timelineClips.length > 0) {
+                        for (let i = 0; i < this.timelineClips.length; i++) {
+                            Stage.removeChild(this.timelineClips[i]);
+                        }
                         this.timelineClip = null;
+                        this.timelineEnabled = false;
+                        this.timelineClips = [];
+                        return;
                     }
                     this.timelineEnabled = !this.timelineEnabled;
                     this.timelineClip = this.getBottomMC();
@@ -279,6 +287,7 @@ export default class SCEditor {
                         Stage.addChild(slider_replay_bar_button);
 
                         const btn = this.createButton(playback_button, 550, 450);
+                        this.timelineClips.push(btn, bg, slider_replay_bar_button)
                         this.playbackBtn = btn;
                         this.timelineSlider = slider_replay_bar_button;
                         const timelinesliderTask = new TimelineSliderTask();
@@ -322,8 +331,8 @@ export default class SCEditor {
                     }
                 }
 
-                if (this.miscButtons.length > 0 &&
-                    clicked.equals(this.miscButtons[2])
+                if (this.miscButtons.length > 0 && false
+                    //clicked.equals(this.miscButtons[999])
                 ) {
                     // ADDING MOVIECLIP TO STAGE BY ID
                     const logger = Logger.getInstance().withContext("MOVIECLIP TEST");
@@ -340,8 +349,8 @@ export default class SCEditor {
 
                         const children_array1 = element.add(16).readPointer();
 
-                        for (let j = 0; j < instance_count; j++) { // todo: fix
-                            const child_id = children_array1.add(2 * j).readU16();
+                        for (let j = 0; j < instance_count; j++) {
+                            const child_id = children_array1.add(2 * j).readUShort();
                             logger.debug(`ID: ${id}, Child ID: ${child_id}`);
                         }
                         
@@ -350,15 +359,15 @@ export default class SCEditor {
                             for (let j = 0; j < instance_count; j++) {
                                 const child_name = children_array2.add(8 * j).readPointer().readUtf8String();
 
-                                logger.debug(`ID: ${id}, Child Name: ${child_name}`);
+                                //logger.debug(`ID: ${id}, Child Name: ${child_name}`);
                             }
                         } catch (e) {
                             
                         }
-                        logger.debug(`ID: ${id}, Framerate: ${framerate}`);
-                        if (id == 8) {
+                        //logger.debug(`ID: ${id}, Framerate: ${framerate}`);
+                        /*if (id == 8) {
                             const x_mc = element;
-                            const MovieClip = new NativeFunction(base.add(0xBA4400), 'pointer', ['pointer', 'pointer', 'int'])
+                            const MovieClip = new NativeFunction(base.add(0xBA3708), 'pointer', ['pointer', 'pointer', 'int'])
                             (x_mc, this.selectedFile.getSWF(), 0); // MovieClip::createMovieClip
 
                             // atp we have the movieclip yay!
@@ -366,11 +375,11 @@ export default class SCEditor {
                             MovieClip.add(32).writeFloat(200); // x
                             MovieClip.add(36).writeFloat(200) // y
                             Stage.addChild(MovieClip);
-                        }
+                        }*/
                     }
                 }
 
-                if (this.miscButtons.length > 0 && clicked.equals(this.miscButtons[3])) {
+                if (this.miscButtons.length > 0 && clicked.equals(this.miscButtons[1])) {
                     const index = this.scFiles.indexOf(this.selectedSCFile);
                     const nextIndex = (index + 1) % this.scFiles.length;
 
@@ -436,7 +445,7 @@ export default class SCEditor {
         const text = this.selectedFile.getExportNames().slice(start, start + 20);
         const exportNameCount = this.selectedFile.getExportNameCount();
 
-        this.logger.debug(text);
+        //this.logger.debug(text);
 
         // create labels for export names
         for (let i = 0; i < 20; i++) {
@@ -472,7 +481,7 @@ export default class SCEditor {
         if (!this.interceptorAttached) {
             this.interceptorAttached = true;
 
-            Interceptor.attach(base.add(0xBD8AF8), {
+            Interceptor.attach(base.add(0xBD7E00), { // CustomButton::buttonClicked
                 onEnter: (args) => {
                     const btnPtr = args[0].toInt32();
                     const index = this.buttonMap.get(btnPtr);
@@ -487,16 +496,16 @@ export default class SCEditor {
                     );
 
                     if (this.selectedClip) {
-                        new NativeFunction(base.add(0xBB75EC), 'pointer', ['pointer', 'pointer'])(
+                        new NativeFunction(base.add(0xBB68F4), 'pointer', ['pointer', 'pointer'])(
                             this.background,
                             this.selectedClip
-                        );
+                        ); // Sprite::removeChild
                     }
 
-                    new NativeFunction(base.add(0xBB7314), "pointer", ["pointer", "pointer"])(
+                    new NativeFunction(base.add(0xBB661C), "pointer", ["pointer", "pointer"])(
                         this.background,
                         clip
-                    );
+                    ); // Sprite::addChild
 
                     clip.add(16).writeFloat(clip.add(16).readFloat() * 0.33);
                     clip.add(28).writeFloat(clip.add(28).readFloat() * 0.33);

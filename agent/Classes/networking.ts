@@ -4,8 +4,6 @@ export default class ServerConnection extends BaseClass {
     constructor() {
         super();
     }
-
-    public static update() {
-        return this.add(0x77E294);
-    }
+    
+    public static readonly update = this.add(0x77CFB4);
 }

@@ -1,7 +1,7 @@
 import { ResourceManager } from "../Classes/titan";
 
 export default class SupercellSWF {
-    swf: NativePointer;
+    private swf: NativePointer;
     constructor(swf: NativePointer) {
         this.swf = swf;
     }

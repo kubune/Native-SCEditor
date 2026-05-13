@@ -13,7 +13,7 @@ export class MovieClip extends BaseClass {
         else {
             namePtr = name as NativePointer;
         }
-        return new NativeFunction(this.add(0xBA7AA0), 'pointer', ['pointer', 'pointer'])(movieClipPtr, namePtr);
+        return new NativeFunction(this.add(0xBA6DA8), 'pointer', ['pointer', 'pointer'])(movieClipPtr, namePtr);
     }
 
     public static getTextFieldByName(movieClipPtr: NativePointer, name: String | NativePointer) {
@@ -24,11 +24,11 @@ export class MovieClip extends BaseClass {
         else {
             namePtr = name as NativePointer;
         } 
-        return new NativeFunction(this.add(0xBA7D00), 'pointer', ['pointer', 'pointer'])(movieClipPtr, namePtr);
+        return new NativeFunction(this.add(0xBA7008), 'pointer', ['pointer', 'pointer'])(movieClipPtr, namePtr);
     }
 
     public static gotoAndStopFrameIndex(movieClipPtr: NativePointer, frameIndex: number) {
-        return new NativeFunction(this.add(0xBA6E6C), 'pointer', ['pointer', 'int'])(movieClipPtr, frameIndex);
+        return new NativeFunction(this.add(0xBA6174), 'pointer', ['pointer', 'int'])(movieClipPtr, frameIndex);
     }
 }
 
@@ -38,6 +38,6 @@ export class TextField extends BaseClass {
     }
 
     public static setText(textFieldPtr: NativePointer, text: String | NativePointer) {
-        return new NativeFunction(this.add(0xBD5470), 'pointer', ['pointer', 'pointer'])(textFieldPtr, (typeof text === "string" ? text.scptr() : text as NativePointer));
+        return new NativeFunction(this.add(0xBD4778), 'pointer', ['pointer', 'pointer'])(textFieldPtr, (typeof text === "string" ? text.scptr() : text as NativePointer));
     }
 }

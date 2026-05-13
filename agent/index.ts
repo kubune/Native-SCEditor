@@ -18,15 +18,15 @@ assets.init();
 
 PatchNetworking();
 GoToLimboState();
-RemoveClickSound();
+//RemoveClickSound();
 
 const logger = Logger.getInstance().withContext("Main");
 logger.debug(`found base at @${base}`);
 
-Interceptor.attach(base.add(0x93A8B4), {
+/*Interceptor.attach(base.add(0x93A8B4), {
     onEnter(args) {
         const logger = Logger.getInstance().withContext("DataTableResourcesLoader::listResources")
-        this.stringer = Interceptor.attach(base.add(0xD52620), {
+            stringer = Interceptor.attach(base.add(0xD51900), {
             onEnter(args) {
                 const str = args[1];
                 logger.debug(`load -> ${str.fromsc()}`);
@@ -36,11 +36,11 @@ Interceptor.attach(base.add(0x93A8B4), {
     onLeave(retval) {
         this.stringer.detach();
     }
-})
+})*/
 
 let sceditor: any = null;
 
-Interceptor.attach(base.add(0x916DB8), { // LoadingScreen constuctor
+Interceptor.attach(base.add(0x915324), { // LoadingScreen constuctor
     // here we start to actually load our "sc-editor"
     onEnter(args) {
         sceditor = new SCEditor();
@@ -50,7 +50,7 @@ Interceptor.attach(base.add(0x916DB8), { // LoadingScreen constuctor
 
 const tracker = new TouchTracker();
 
-Interceptor.attach(base.add(0xD613F0), { // InputTouches::moveTouch
+Interceptor.attach(base.add(0xD606D0), { // InputTouches::moveTouch
     onEnter(args) {
         const id = args[0].toInt32();
         const x = args[1].toInt32();

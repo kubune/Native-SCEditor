@@ -4,6 +4,6 @@ import Logger from "../logger";
 export default () => {
     const logger = Logger.getInstance().withContext("Patch");
     logger.debug("Trying to patch networking...")
-    Interceptor.replace(ServerConnection.update(), new NativeCallback(function() {}, "void", []));
+    Interceptor.replace(ServerConnection.update, new NativeCallback(function() {}, "void", []));
     logger.debug("Networking patched!")
 }
