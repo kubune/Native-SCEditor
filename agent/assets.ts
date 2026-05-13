@@ -41,7 +41,7 @@ export default class Assets {
                 const name = namePtr.readUtf8String()
                 if (name != null)
                 {
-                    nameArray.push(name);
+                    nameArray.push(pathStr + "/" + name);
                 }
             }
 

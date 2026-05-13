@@ -38,7 +38,7 @@ export default class SCEditor {
 
     private exportButtons: NativePointer[] = [];
 
-    private scFiles = ['sce_ui.sc'];
+    private scFiles = ['sc/sce_ui.sc'];
     private page: number = 0;
 
     private timelineEnabled: boolean = false;
@@ -200,7 +200,7 @@ export default class SCEditor {
             }
         }
         const text = [
-            `Selected File: sc/${this.selectedSCFile.replace("sc/", "")}`,
+            `Selected File: ${this.selectedSCFile}`,
             `Selected MovieClip: ${movieClipName}`,
             `Frames: ${MovieClipNativeHelper.getTotalFrames(this.selectedClip)}\n`,
             `Export Names: ${this.selectedFile.getExportNameCount()}`,
@@ -383,7 +383,7 @@ export default class SCEditor {
                     const index = this.scFiles.indexOf(this.selectedSCFile);
                     const nextIndex = (index + 1) % this.scFiles.length;
 
-                    const name = "sc/" + this.scFiles[nextIndex];
+                    const name = this.scFiles[nextIndex];
                     try {
                         GameMain.loadAsset(name);
                     } catch (e) {
@@ -490,7 +490,7 @@ export default class SCEditor {
 
                     const uisc = this.selectedFile;
                     const clip = ResourceManager.getMovieClip(
-                        `sc/${this.selectedSCFile.replace("sc/", "")}`,
+                        this.selectedSCFile,
                         uisc.getExportNameAt(index),
                         0
                     );
@@ -514,7 +514,7 @@ export default class SCEditor {
 
                     this.selectedClip = clip;
 
-                    const exportName = clip.add(96).readPointer().readUtf8String();
+                    /*const exportName = clip.add(96).readPointer().readUtf8String();
                     const childrenArray = clip.add(120).readPointer();
                     const childrenCount = clip.add(160).readU16();
 
@@ -527,7 +527,7 @@ export default class SCEditor {
                         } catch {
                             log.debug(`${exportName}: null`);
                         }
-                    }
+                    }*/
 
                     if (this.debugTextField) {
                         Stage.removeChild(this.debugTextField);
