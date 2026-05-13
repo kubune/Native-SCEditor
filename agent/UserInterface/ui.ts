@@ -237,6 +237,9 @@ export default class SCEditor {
                         if ($entry.isDirectory) {
                             $files.splice($files.indexOf($entry), 1);
                         }
+                        if (!$entry.name.endsWith(".sc")) {
+                            $files.splice($files.indexOf($entry), 1);
+                        }
                     }
                     this.createLoadingList($files);
                 }

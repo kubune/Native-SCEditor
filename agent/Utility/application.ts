@@ -26,7 +26,7 @@ export default class Application {
     }
 
     public static getApplicationDirectory(): string {
-        return `/data/data/${this.getPackageName()}/`;
+        return `/data/data/${this.getPackageName()}`;
     }
 
     public static getUpdateDirectory(): string {
