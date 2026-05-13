@@ -36,12 +36,13 @@ export default class C {
     public static opendir(path: NativePointer): NativePointer {
         return new NativeFunction(this.$getExport("opendir"), "pointer", ["pointer"])(path);
     }
-
     public static readdir(dir: NativePointer): NativePointer {
         return new NativeFunction(this.$getExport("readdir"), "pointer", ["pointer"])(dir);
     }
-
     public static closedir(dir: NativePointer): number {
         return new NativeFunction(this.$getExport("closedir"), "int", ["pointer"])(dir);
+    }
+    public static remove(path: string): number {
+        return new NativeFunction(this.$getExport("remove"), "int", ["pointer"])(path.ptr());
     }
 }

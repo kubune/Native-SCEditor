@@ -1,5 +1,6 @@
 import C from "../c";
 import FileSystem from "./fileSystem";
+import Path from "./path";
 
 type Architecture = "arm" | "arm64";
 
@@ -22,6 +23,14 @@ export default class Application {
             C.mkdir($path.ptr());
         }
         return $path;
+    }
+
+    public static getApplicationDirectory(): string {
+        return `/data/data/${this.getPackageName()}/`;
+    }
+
+    public static getUpdateDirectory(): string {
+        return Path.join(this.getApplicationDirectory(), "update");
     }
 
     public static get arch() {
