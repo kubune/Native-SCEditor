@@ -9,10 +9,11 @@ Why not? ¯\\\_(ツ)\_/¯ (S.B will kill me)
 - EMULATOR SUPPORT
 - Viewing .sc files directly from the game assets
 - Pan & Zoom
+- Loading .sc files from phone storage (app's media directory)
 - WIP Timeline
 
 # Download
-- MediaFire - [Download APK](https://www.mediafire.com/file/s59syp8xm9bna5q/SCEditor_1.apk)
+- MediaFire - [Download APK](https://www.mediafire.com/file/tkfhhkoejuirmt6/SCEditor_2.apk)
 - iOS build may be released later but I don't promise that since I don't have an iOS device to test on
 
 # How to use
@@ -20,6 +21,10 @@ Why not? ¯\\\_(ツ)\_/¯ (S.B will kill me)
 2. Build the project using `npm install`
 3. In `dist` directory there will be `libeditor.so` modify the provided apk and replace the library if you want to modify the source
 4. Run `SCEditor` on your device
+
+# Loading custom SC Files
+1. Navigate to `Android/media/com.kubune.sceditor/`
+2. Put your .sc files in the directory (supports multiple directories aswell)
 
 # Issues & Pull Requests
 - Please report any issues you find - it helps others to know this isn't only their issue and I can fix it quicker for everyone!
@@ -30,12 +35,11 @@ Why not? ¯\\\_(ツ)\_/¯ (S.B will kill me)
 - Better Timeline (slider)
 - Viewing timelineChildrens
 - Better UI
-- Loading .sc files from phone storage
 - Hide UI using home button
 - Scroll Area on exports list
 
 # Additional Info
-- Made in laser@66.263 (arm64) -> Updated to laser@66.293 (arm64)
+- Made in laser@66.293 (arm64)
 - kinda vibecoded in some days
 - due to lack of motivation i will not be maintaining this project constantly
 
